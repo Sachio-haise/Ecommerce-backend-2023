@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'email_verified_at',
+        'bio',
+        'google_id', // Added
+        'avatar', // Added
     ];
 
     /**
@@ -29,7 +33,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+       // 'password',
         'remember_token',
     ];
 

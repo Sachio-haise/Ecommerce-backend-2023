@@ -15,6 +15,7 @@ class Product extends Model
       'description',
       'price',
       'image',
+      'gallery',
       'quantity',
       'discount',
       'size',
@@ -22,11 +23,15 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'image' => 'array',
+        'gallery' => 'array',
     ];
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class,'category_id');
     }
+
+    protected $hidden = [
+          'updated_at',
+    ];
 }

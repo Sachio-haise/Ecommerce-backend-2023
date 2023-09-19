@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('subtitle')->nullable($value=true);
             $table->string('image');
-            $table->string('product_qty')->nullable($value=true);
+            $table->string('product_qty')->default('0');
             $table->foreignId('product_id')->onDelete('cascade')->nullable($value=true);
             $table->timestamps();
         });

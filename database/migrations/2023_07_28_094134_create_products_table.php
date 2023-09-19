@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('title')->nullable($value=true);
             $table->text('description')->nullable($value=true);
             $table->string('price')->nullable($value=true);
-            $table->json('image')->nullable($value=true);
+            $table->json('gallery')->nullable($value=true);
+            $table->string('image');
             $table->string('quantity')->nullable($value=true);
             $table->string('discount')->nullable($value=true);
             $table->string('size')->default('md')->nullable($value=true);

@@ -31,13 +31,12 @@ class CategoryResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('title')->label('Name')->required(),
 
-                        Forms\Components\FileUpload::make('image')
-                            ->disk('s3')
+                        Forms\Components\FileUpload::make('image')->label('Image')->disk('s3')
                             ->getUploadedFileNameForStorageUsing(function (TemporaryUploadedFile $file): string {
                                 return (string) str($file->getClientOriginalName())->prepend('category-');
                             })
                             ->directory('categories')
-                            ->visibility('private')
+                            ->visibility('private')->required(),
                     ])
 
             ]);
@@ -50,9 +49,8 @@ class CategoryResource extends Resource
             ->columns([
 
                 Tables\Columns\TextColumn::make('title')->label('Name')->sortable()->searchable(),
-               Tables\Columns\TextColumn::make('products_count')->label('Product Quantity')->counts('products'),
-               S3ImageColumn::make('image')->label('Image'),
-               Tables\Columns\ImageColumn::make('image')->disk('s3')
+                Tables\Columns\TextColumn::make('products_count')->label('Product Quantity')->counts('products'),
+                S3ImageColumn::make('image')->label('Image'),
             ])
             ->filters([
                 //

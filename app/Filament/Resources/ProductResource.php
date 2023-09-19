@@ -14,6 +14,7 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Livewire\TemporaryUploadedFile;
+use App\Filament\Tables\Columns\S3ImageColumn;
 
 class ProductResource extends Resource
 {
@@ -37,19 +38,28 @@ class ProductResource extends Resource
                     Forms\Components\Select::make('size')
                         ->label('Product Size')
                         ->options(['sm', 'md', 'lg'])
-                        ->searchable()
+                        ->searchable(),
+
+                    Forms\Components\FileUpload::make('image')->label('Image')->disk('s3')
+                        ->getUploadedFileNameForStorageUsing(function (TemporaryUploadedFile $file): string {
+                            return (string) str($file->getClientOriginalName())->prepend('product-');
+                        })
+                        ->directory('products')
+                        ->visibility('private')->required(),
                 ])->columns(2),
 
 
                 Forms\Components\Section::make('Gallery')
                     ->schema([
-                        Forms\Components\FileUpload::make('image')
+                        Forms\Components\FileUpload::make('gallery')
                             ->disk('s3')
                             ->getUploadedFileNameForStorageUsing(function (TemporaryUploadedFile $file): string {
-                                return (string) str($file->getClientOriginalName())->prepend('product-');
+                                return (string) str($file->getClientOriginalName())->prepend('product-gallery-');
                             })
                             ->multiple()
-                            ->directory('products')
+                            ->directory('products-gallery')
+                            ->minFiles(0)
+                            ->maxFiles(6)
                             ->visibility('public')
                             ->imagePreviewHeight('150')
                             ->imageCropAspectRatio('1:1')
@@ -64,7 +74,12 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('title')->label('Product Name'),
+                Tables\Columns\TextColumn::make('description')->label('Description'),
+                Tables\Columns\TextColumn::make('price')->label('Price'),
+                Tables\Columns\TextColumn::make('quantity')->label('Quantity'),
+                Tables\Columns\TextColumn::make('discount')->label('Discount'),
+                S3ImageColumn::make('image')->label('Image'),
             ])
             ->filters([
                 //
